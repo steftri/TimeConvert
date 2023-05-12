@@ -1,0 +1,20 @@
+# Syntax Coloring Map For TimeConvert
+# https://arduino.github.io/arduino-cli/library-specification/#keywords
+# Formatted by a single true tab (not spaces)
+
+# Datatypes (KEYWORD1)
+Time  KEYWORD1
+TimeCuc KEYWORD1
+TimeGregorian KEYWORD1
+
+# Methods and Functions (KEYWORD2)
+set	KEYWORD2
+get	KEYWORD2
+time2Gregorian  KEYWORD2
+gregorian2Time  KEYWORD2
+setEpoch  KEYWORD2
+time2Iso8601  KEYWORD2
+
+# Instances (KEYWORD2)
+
+# Constants (LITERAL1)
