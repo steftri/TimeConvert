@@ -27,12 +27,6 @@ void Time::set(const uint32_t u32_Sec, const uint32_t u32_SubSec)
 
 uint32_t Time::get(uint32_t *pu32_Sec, uint32_t *pu32_SubSec)
 {
-  uint32_t u32_Sec;
-  uint32_t u32_SubSec;
-
-  u32_Sec=mu32_Sec;
-  u32_SubSec=mu32_SubSec;
-
   if(pu32_Sec)
     *pu32_Sec = mu32_Sec;
   if(pu32_SubSec)
