@@ -6,21 +6,21 @@
 
 
 TimeGregorian::TimeGregorian(const int16_t s16_TimeZoneInMin) 
- : Time(UTC)
+ : TimeBase(UTC)
  , ms16_TimeZoneInMin{s16_TimeZoneInMin}
 {
 }
 
 
 TimeGregorian::TimeGregorian(const ETimeBase e_TimeBase, const int16_t s16_TimeZoneInMin) 
- : Time(e_TimeBase)
+ : TimeBase(e_TimeBase)
  , ms16_TimeZoneInMin{s16_TimeZoneInMin}
 {
 }
 
 
 TimeGregorian::TimeGregorian(const uint16_t u16_Year, const uint8_t u8_Month, const uint8_t u8_Day, const uint8_t u8_Hour, const uint8_t u8_Min, const uint8_t u8_Sec, const int16_t s16_TimeZoneInMin)
-  : Time(UTC)
+  : TimeBase(UTC)
   , ms16_TimeZoneInMin{s16_TimeZoneInMin}
 {
   set(u16_Year, u8_Month, u8_Day, u8_Hour, u8_Min, u8_Sec);
@@ -200,7 +200,7 @@ void TimeGregorian::set(const uint16_t u16_Year, const uint8_t u8_Month, const u
   uint64_t u64_TimeInSec = 0;
 
   gregorian2Time(&u64_TimeInSec, u16_Year, u8_Month, u8_Day, u8_Hour, u8_Min, u8_Sec, ms16_TimeZoneInMin);
-  Time::set(u64_TimeInSec);
+  TimeBase::set(u64_TimeInSec);
 }
 
 
@@ -210,7 +210,7 @@ void TimeGregorian::get(uint16_t *pu16_Year, uint8_t *pu8_Month, uint8_t *pu8_Da
 {
   uint64_t u64_TimeInSec = 0;
   
-  u64_TimeInSec = Time::get();
+  u64_TimeInSec = TimeBase::get();
   time2Gregorian(pu16_Year, pu8_Month, pu8_Day, pu8_Hour, pu8_Min, pu8_Sec, u64_TimeInSec, ms16_TimeZoneInMin);
 }
 

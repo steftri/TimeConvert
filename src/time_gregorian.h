@@ -7,7 +7,7 @@
 
 
 
-class TimeGregorian : public Time
+class TimeGregorian : public TimeBase
 {
 private:
 //  static int8_t ms8_UtcLeapSec;

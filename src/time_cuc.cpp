@@ -28,7 +28,7 @@ void TimeCuc::set(const uint8_t *pu8_TimeCucBuffer, const uint8_t u8_BufferSize)
   for(uint8_t i=0; i<u8_FineTime; i++)
     u32_SubSec |= ((uint32_t)(pu8_TimeCucBuffer[1+u8_CoarseTime+i])<<(8*(3-i)));
   
-  Time::set(u32_Sec, u32_SubSec);
+  TimeBase::set(u32_Sec, u32_SubSec);
   
   return;
 }
@@ -55,7 +55,7 @@ void TimeCuc::get(uint8_t *pu8_TimeCucBuffer, const uint8_t u8_BufferSize, const
     return; // buffer size is too small to hold valid time
 
   // first, get time in Sec and SubSec
-  Time::get(&u64_Sec, &u32_SubSec);
+  TimeBase::get(&u64_Sec, &u32_SubSec);
 
   pu8_TimeCucBuffer[0]=(uint8_t)e_TimeCucFormat;
   for(uint8_t i=0; i<u8_CoarseTime; i++)

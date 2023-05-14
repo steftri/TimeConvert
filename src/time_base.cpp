@@ -2,25 +2,16 @@
 
 
 
-Time::Time(const uint64_t u64_Sec, const uint32_t u32_SubSec)
-  : me_TimeBase{TAI}
-  , mu64_Sec{u64_Sec}
-  , mu32_SubSec{u32_SubSec}
-  , mb_Valid{true}
-{
-}
-
-
-Time::Time(ETimeBase e_TimeBase, const uint64_t u64_Sec, const uint32_t u32_SubSec)
+TimeBase::TimeBase(ETimeBase e_TimeBase)
   : me_TimeBase{e_TimeBase}
-  , mu64_Sec{u64_Sec}
-  , mu32_SubSec{u32_SubSec}
+  , mu64_Sec{0}
+  , mu32_SubSec{0}
   , mb_Valid{true}
 {
 }
 
 
-void Time::set(const uint64_t u64_Sec, const uint32_t u32_SubSec)
+void TimeBase::set(const uint64_t u64_Sec, const uint32_t u32_SubSec)
 {
   mu64_Sec = u64_Sec;
   mu32_SubSec = u32_SubSec;
@@ -29,7 +20,7 @@ void Time::set(const uint64_t u64_Sec, const uint32_t u32_SubSec)
 
 
 
-uint64_t Time::get(uint64_t *pu64_Sec, uint32_t *pu32_SubSec)
+uint64_t TimeBase::get(uint64_t *pu64_Sec, uint32_t *pu32_SubSec)
 {
   if(pu64_Sec)
     *pu64_Sec = mu64_Sec;
@@ -41,21 +32,21 @@ uint64_t Time::get(uint64_t *pu64_Sec, uint32_t *pu32_SubSec)
 
 
 
-bool Time::isValid(void)
+bool TimeBase::isValid(void)
 {
   return mb_Valid;
 }
 
 
 
-void Time::setInvalid(void)
+void TimeBase::setInvalid(void)
 {
   mb_Valid=false;
 }  
 
 
 
-bool Time::operator==(const Time &T2)
+bool TimeBase::operator==(const TimeBase &T2)
 {
   if(  (this->mu64_Sec==T2.mu64_Sec)
      &&(this->mu32_SubSec==T2.mu32_SubSec))
@@ -65,7 +56,7 @@ bool Time::operator==(const Time &T2)
 
 
 
-bool Time::operator<=(const Time &T2)
+bool TimeBase::operator<=(const TimeBase &T2)
 {
   if(this->mu64_Sec<T2.mu64_Sec)
     return true;
@@ -76,7 +67,7 @@ bool Time::operator<=(const Time &T2)
 
 
 
-bool Time::operator<(const Time &T2)
+bool TimeBase::operator<(const TimeBase &T2)
 {
   if(this->mu64_Sec<T2.mu64_Sec)
     return true;
@@ -87,7 +78,7 @@ bool Time::operator<(const Time &T2)
 
 
 
-bool Time::operator>=(const Time &T2)
+bool TimeBase::operator>=(const TimeBase &T2)
 {
   if(this->mu64_Sec>T2.mu64_Sec)
     return true;
@@ -98,7 +89,7 @@ bool Time::operator>=(const Time &T2)
 
 
 
-bool Time::operator>(const Time &T2)
+bool TimeBase::operator>(const TimeBase &T2)
 {
   if(this->mu64_Sec>T2.mu64_Sec)
     return true;

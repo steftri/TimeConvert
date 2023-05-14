@@ -8,7 +8,7 @@
 
 
 
-class UnixTimestamp : public Time
+class UnixTimestamp : public TimeBase
 {
 public:
   UnixTimestamp(const time_t SecSince1970 = 0);

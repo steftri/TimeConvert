@@ -20,7 +20,7 @@
 const uint8_t CTimeCucSize = 8;
 
 
-class TimeCuc : public Time
+class TimeCuc : public TimeBase
 {
 public:
   typedef enum

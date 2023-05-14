@@ -3,7 +3,7 @@
 
 #include <inttypes.h>
 
-class Time
+class TimeBase
 {
 public:
   typedef enum 
@@ -21,9 +21,7 @@ protected:
   bool      mb_Valid;
   
 public:
-  
-  Time(const uint64_t u64_Sec = 0, const uint32_t u32_SubSec = 0);
-  Time(ETimeBase e_TimeBase, const uint64_t u64_Sec = 0, const uint32_t u32_SubSec = 0);
+  TimeBase(ETimeBase e_TimeBase = TAI);
   
   void set(const uint64_t u64_Sec, const uint32_t u32_SubSec = 0);
   uint64_t get(uint64_t *pu64_Sec = nullptr, uint32_t *pu32_SubSec = nullptr);
@@ -31,11 +29,11 @@ public:
   bool isValid(void);
   void setInvalid(void);    
   
-  bool operator==(const Time &T2);
-  bool operator<=(const Time &T2);
-  bool operator<(const Time &T2);
-  bool operator>=(const Time &T2);
-  bool operator>(const Time &T2);
+  bool operator==(const TimeBase &T2);
+  bool operator<=(const TimeBase &T2);
+  bool operator<(const TimeBase &T2);
+  bool operator>=(const TimeBase &T2);
+  bool operator>(const TimeBase &T2);
 };
 
 
