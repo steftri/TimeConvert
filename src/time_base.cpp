@@ -1,45 +1,63 @@
-#ifdef AVR
-#include <Arduino.h>
-#else
-#include <cstdint>
-#include <cstring>
-#endif
-
 #include "time_base.h"
 
 
 
-Time::Time(const uint32_t u32_Sec, const uint32_t u32_SubSec)
+Time::Time(const uint64_t u64_Sec, const uint32_t u32_SubSec)
+  : me_TimeBase{TAI}
+  , mu64_Sec{u64_Sec}
+  , mu32_SubSec{u32_SubSec}
+  , mb_Valid{true}
 {
-  mu32_Sec = u32_Sec;
+}
+
+
+Time::Time(ETimeBase e_TimeBase, const uint64_t u64_Sec, const uint32_t u32_SubSec)
+  : me_TimeBase{e_TimeBase}
+  , mu64_Sec{u64_Sec}
+  , mu32_SubSec{u32_SubSec}
+  , mb_Valid{true}
+{
+}
+
+
+void Time::set(const uint64_t u64_Sec, const uint32_t u32_SubSec)
+{
+  mu64_Sec = u64_Sec;
   mu32_SubSec = u32_SubSec;
+  mb_Valid = true;
 }
 
 
 
-void Time::set(const uint32_t u32_Sec, const uint32_t u32_SubSec)
+uint64_t Time::get(uint64_t *pu64_Sec, uint32_t *pu32_SubSec)
 {
-  mu32_Sec = u32_Sec;
-  mu32_SubSec = u32_SubSec;
-}
-
-
-
-uint32_t Time::get(uint32_t *pu32_Sec, uint32_t *pu32_SubSec)
-{
-  if(pu32_Sec)
-    *pu32_Sec = mu32_Sec;
+  if(pu64_Sec)
+    *pu64_Sec = mu64_Sec;
   if(pu32_SubSec)
     *pu32_SubSec = mu32_SubSec;
 
-  return mu32_Sec;
+  return mu64_Sec;
 }
+
+
+
+bool Time::isValid(void)
+{
+  return mb_Valid;
+}
+
+
+
+void Time::setInvalid(void)
+{
+  mb_Valid=false;
+}  
 
 
 
 bool Time::operator==(const Time &T2)
 {
-  if(  (this->mu32_Sec==T2.mu32_Sec)
+  if(  (this->mu64_Sec==T2.mu64_Sec)
      &&(this->mu32_SubSec==T2.mu32_SubSec))
     return true;
   return false;
@@ -49,9 +67,9 @@ bool Time::operator==(const Time &T2)
 
 bool Time::operator<=(const Time &T2)
 {
-  if(this->mu32_Sec<T2.mu32_Sec)
+  if(this->mu64_Sec<T2.mu64_Sec)
     return true;
-  if(this->mu32_Sec==T2.mu32_Sec && this->mu32_SubSec<=T2.mu32_SubSec)
+  if(this->mu64_Sec==T2.mu64_Sec && this->mu32_SubSec<=T2.mu32_SubSec)
     return true;
   return false;
 }
@@ -60,9 +78,9 @@ bool Time::operator<=(const Time &T2)
 
 bool Time::operator<(const Time &T2)
 {
-  if(this->mu32_Sec<T2.mu32_Sec)
+  if(this->mu64_Sec<T2.mu64_Sec)
     return true;
-  if(this->mu32_Sec==T2.mu32_Sec && this->mu32_SubSec<T2.mu32_SubSec)
+  if(this->mu64_Sec==T2.mu64_Sec && this->mu32_SubSec<T2.mu32_SubSec)
     return true;
   return false;
 }
@@ -71,9 +89,9 @@ bool Time::operator<(const Time &T2)
 
 bool Time::operator>=(const Time &T2)
 {
-  if(this->mu32_Sec>T2.mu32_Sec)
+  if(this->mu64_Sec>T2.mu64_Sec)
     return true;
-  if(this->mu32_Sec==T2.mu32_Sec && this->mu32_SubSec>=T2.mu32_SubSec)
+  if(this->mu64_Sec==T2.mu64_Sec && this->mu32_SubSec>=T2.mu32_SubSec)
     return true;
   return false;
 }
@@ -82,9 +100,9 @@ bool Time::operator>=(const Time &T2)
 
 bool Time::operator>(const Time &T2)
 {
-  if(this->mu32_Sec>T2.mu32_Sec)
+  if(this->mu64_Sec>T2.mu64_Sec)
     return true;
-  if(this->mu32_Sec==T2.mu32_Sec && this->mu32_SubSec>T2.mu32_SubSec)
+  if(this->mu64_Sec==T2.mu64_Sec && this->mu32_SubSec>T2.mu32_SubSec)
     return true;
   return false;
 }

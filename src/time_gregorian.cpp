@@ -1,25 +1,38 @@
-#ifdef AVR
-#include <Arduino.h>
-#else
-#include <cstdint>
-#include <cstring>
-#include <cstdio>
-#endif
+#include <stdio.h>
 
 #include "time_gregorian.h"
 
 
 
 
-TimeGregorian::TimeGregorian(const int16_t s16_TimeZoneInMin)
+TimeGregorian::TimeGregorian(const int16_t s16_TimeZoneInMin) 
+ : Time(UTC)
+ , ms16_TimeZoneInMin{s16_TimeZoneInMin}
 {
-  ms16_TimeZoneInMin = s16_TimeZoneInMin;
 }
+
+
+TimeGregorian::TimeGregorian(const ETimeBase e_TimeBase, const int16_t s16_TimeZoneInMin) 
+ : Time(e_TimeBase)
+ , ms16_TimeZoneInMin{s16_TimeZoneInMin}
+{
+}
+
+
+TimeGregorian::TimeGregorian(const uint16_t u16_Year, const uint8_t u8_Month, const uint8_t u8_Day, const uint8_t u8_Hour, const uint8_t u8_Min, const uint8_t u8_Sec, const int16_t s16_TimeZoneInMin)
+  : Time(UTC)
+  , ms16_TimeZoneInMin{s16_TimeZoneInMin}
+{
+  set(u16_Year, u8_Month, u8_Day, u8_Hour, u8_Min, u8_Sec);
+}    
+
+
+
 
 
 
 void TimeGregorian::time2Gregorian(uint16_t *pu16_Year, uint8_t *pu8_Month, uint8_t *pu8_Day,
-      uint8_t *pu8_Hour, uint8_t *pu8_Min, uint8_t *pu8_Sec, const uint32_t u32_TimeInSec, const int16_t s16_TimeZoneMin)
+      uint8_t *pu8_Hour, uint8_t *pu8_Min, uint8_t *pu8_Sec, const uint64_t u64_TimeInSec, const int16_t s16_TimeZoneMin)
 {
   
   const uint32_t SEC_PER_DAY        =  86400ul; /*  24* 60 * 60 */
@@ -37,8 +50,8 @@ void TimeGregorian::time2Gregorian(uint16_t *pu16_Year, uint8_t *pu8_Month, uint
   uint8_t u8_Month;
   uint8_t u8_Day;
 
-  u32_DaysAD = DAY_AD_1970_01_01 + (u32_TimeInSec+mu32_EpochOffset) / SEC_PER_DAY;
-  u32_SecOfDay = (u32_TimeInSec+mu32_EpochOffset) % SEC_PER_DAY;
+  u32_DaysAD = DAY_AD_1970_01_01 + (u64_TimeInSec+mu64_EpochOffset) / SEC_PER_DAY;
+  u32_SecOfDay = (u64_TimeInSec+mu64_EpochOffset) % SEC_PER_DAY;
   
   /* Schaltjahrregel des Gregorianischen Kalenders: jedes durch 100 teilbare Jahr ist kein Schaltjahr, es sei denn, es ist durch 400 teilbar. */
   u32_Temp = 4 * (u32_DaysAD + DAYS_PER_100_YEARS + 1) / DAYS_PER_400_YEARS - 1;
@@ -88,17 +101,18 @@ void TimeGregorian::time2Gregorian(uint16_t *pu16_Year, uint8_t *pu8_Month, uint
 }
 
 
+
   
-uint32_t TimeGregorian::_gregorian2UnixTime(uint32_t *pu32_TimeInSec,
+uint64_t TimeGregorian::_gregorian2UnixTime(uint64_t *pu64_TimeInSec,
                                 const uint16_t u16_Year, const uint8_t u8_Month, const uint8_t u8_Day,
                                 const uint8_t u8_Hour, const uint8_t u8_Min, const uint8_t u8_Sec,
                                 const int16_t s16_TimeZoneMin)
 {
-  uint32_t u32_TimeInSec;
+  uint64_t u64_TimeInSec;
   uint16_t u16_DayOfYear[12] = /* Anzahl der Tage seit Jahresanfang ohne Tage des aktuellen Monats und ohne Schalttag */
     {0,31,59,90,120,151,181,212,243,273,304,334};
   uint16_t u16_LeapYears;
-  uint32_t u32_DaysSince1970;
+  uint64_t u64_DaysSince1970;
 
   
   /* for algorithm, see https://de.wikipedia.org/wiki/Unixzeit */
@@ -107,42 +121,43 @@ uint32_t TimeGregorian::_gregorian2UnixTime(uint32_t *pu32_TimeInSec,
                 - ((u16_Year-1)-1900)/100
                 + ((u16_Year-1)-1600)/400;
 
-  u32_DaysSince1970 = (u16_Year-1970)*365 + u16_LeapYears
+  u64_DaysSince1970 = (u16_Year-1970)*365 + u16_LeapYears
                     + u16_DayOfYear[u8_Month-1] + u8_Day-1;
 
   if( (u8_Month>2) && (u16_Year%4==0 && (u16_Year%100!=0 || u16_Year%400==0)) )
-    u32_DaysSince1970 += 1; /* +Schalttag, wenn jahr Schaltjahr ist */
+    u64_DaysSince1970 += 1; /* +Schalttag, wenn jahr Schaltjahr ist */
   
-  u32_TimeInSec = (u8_Sec + 60 * ( u8_Min + 60 * (u8_Hour + 24*u32_DaysSince1970) + s16_TimeZoneMin ) );
+  u64_TimeInSec = (u8_Sec + 60 * ( u8_Min + 60 * (u8_Hour + 24*u64_DaysSince1970) + s16_TimeZoneMin ) );
   
-  if(pu32_TimeInSec)
-    *pu32_TimeInSec = u32_TimeInSec;
+  if(pu64_TimeInSec)
+    *pu64_TimeInSec = u64_TimeInSec;
 
-  return u32_TimeInSec;
+  return u64_TimeInSec;
 }
 
 
-uint32_t TimeGregorian::gregorian2Time(uint32_t *pu32_TimeInSec,
+
+uint64_t TimeGregorian::gregorian2Time(uint64_t *pu64_TimeInSec,
                                 const uint16_t u16_Year, const uint8_t u8_Month, const uint8_t u8_Day,
                                 const uint8_t u8_Hour, const uint8_t u8_Min, const uint8_t u8_Sec,
                                 const int16_t s16_TimeZoneMin)
 {
-  uint32_t u32_TimeInSec;
+  uint64_t u64_TimeInSec;
   
-  _gregorian2UnixTime(&u32_TimeInSec, u16_Year, u8_Month, u8_Day, u8_Hour, u8_Min, u8_Sec, s16_TimeZoneMin);
+  _gregorian2UnixTime(&u64_TimeInSec, u16_Year, u8_Month, u8_Day, u8_Hour, u8_Min, u8_Sec, s16_TimeZoneMin);
   
-  u32_TimeInSec -= mu32_EpochOffset;
+  u64_TimeInSec -= mu64_EpochOffset;
   
-  if(pu32_TimeInSec)
-    *pu32_TimeInSec = u32_TimeInSec;
+  if(pu64_TimeInSec)
+    *pu64_TimeInSec = u64_TimeInSec;
 
-  return u32_TimeInSec;
+  return u64_TimeInSec;
 }
 
 
 
 
-uint32_t TimeGregorian::mu32_EpochOffset = 0;
+uint64_t TimeGregorian::mu64_EpochOffset = 0;
 
 int32_t TimeGregorian::setEpoch(const uint16_t u16_Year, const uint8_t u8_Month, const uint8_t u8_Day,
                                 const uint8_t u8_Hour, const uint8_t u8_Min, const uint8_t u8_Sec)
@@ -150,13 +165,13 @@ int32_t TimeGregorian::setEpoch(const uint16_t u16_Year, const uint8_t u8_Month,
   if(u16_Year<1970)
     return -1;
   
-  _gregorian2UnixTime(&mu32_EpochOffset, u16_Year, u8_Month, u8_Day, u8_Hour, u8_Min, u8_Sec);
+  _gregorian2UnixTime(&mu64_EpochOffset, u16_Year, u8_Month, u8_Day, u8_Hour, u8_Min, u8_Sec);
   
   return 0;
 }
 
 
-int32_t TimeGregorian::time2Iso8601(char *pc_Buffer, const uint8_t u8_BufferSize, const uint32_t u32_TimeInSec, const int16_t s16_TimeZoneMin)
+int32_t TimeGregorian::time2Iso8601(char *pc_Buffer, const uint8_t u8_BufferSize, const uint64_t u64_TimeInSec, const int16_t s16_TimeZoneMin)
 {
   uint16_t u16_Year;
   uint8_t u8_Month, u8_Day;
@@ -165,10 +180,10 @@ int32_t TimeGregorian::time2Iso8601(char *pc_Buffer, const uint8_t u8_BufferSize
   if((NULL==pc_Buffer) || (0==u8_BufferSize))
     return -1;
   
-  time2Gregorian(&u16_Year, &u8_Month, &u8_Day, &u8_Hour, &u8_Min, &u8_Sec, u32_TimeInSec, s16_TimeZoneMin);
+  time2Gregorian(&u16_Year, &u8_Month, &u8_Day, &u8_Hour, &u8_Min, &u8_Sec, u64_TimeInSec, s16_TimeZoneMin);
   
   if(u8_BufferSize>=20)
-    sprintf(pc_Buffer, "%04d-%02d-%02d %02d:%02d:%02d", u16_Year, u8_Month, u8_Day, u8_Hour, u8_Min, u8_Sec);
+    sprintf(pc_Buffer, "%04d-%02d-%02dT%02d:%02d:%02d", u16_Year, u8_Month, u8_Day, u8_Hour, u8_Min, u8_Sec);
   else if(u8_BufferSize>=11)
     sprintf(pc_Buffer, "%04d-%02d-%02d", u16_Year, u8_Month, u8_Day);
   else
@@ -182,10 +197,10 @@ int32_t TimeGregorian::time2Iso8601(char *pc_Buffer, const uint8_t u8_BufferSize
 void TimeGregorian::set(const uint16_t u16_Year, const uint8_t u8_Month, const uint8_t u8_Day,
          const uint8_t u8_Hour, const uint8_t u8_Min, const uint8_t u8_Sec)
 {
-  uint32_t u32_TimeInSec = 0;
+  uint64_t u64_TimeInSec = 0;
 
-  gregorian2Time(&u32_TimeInSec, u16_Year, u8_Month, u8_Day, u8_Hour, u8_Min, u8_Sec, ms16_TimeZoneInMin);
-  Time::set(u32_TimeInSec);
+  gregorian2Time(&u64_TimeInSec, u16_Year, u8_Month, u8_Day, u8_Hour, u8_Min, u8_Sec, ms16_TimeZoneInMin);
+  Time::set(u64_TimeInSec);
 }
 
 
@@ -193,10 +208,10 @@ void TimeGregorian::set(const uint16_t u16_Year, const uint8_t u8_Month, const u
 void TimeGregorian::get(uint16_t *pu16_Year, uint8_t *pu8_Month, uint8_t *pu8_Day,
          uint8_t *pu8_Hour, uint8_t *pu8_Min, uint8_t *pu8_Sec)
 {
-  uint32_t u32_TimeInSec = 0;
+  uint64_t u64_TimeInSec = 0;
   
-  Time::get(&u32_TimeInSec);
-  time2Gregorian(pu16_Year, pu8_Month, pu8_Day, pu8_Hour, pu8_Min, pu8_Sec, u32_TimeInSec, ms16_TimeZoneInMin);
+  u64_TimeInSec = Time::get();
+  time2Gregorian(pu16_Year, pu8_Month, pu8_Day, pu8_Hour, pu8_Min, pu8_Sec, u64_TimeInSec, ms16_TimeZoneInMin);
 }
 
 
