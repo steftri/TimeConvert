@@ -3,7 +3,7 @@
 
 
 #define TIME_T_MIN 0
-#define TIME_T_MAX 0xffffffffLL
+#define TIME_T_MAX 0xffffffffUL
 
 
 UnixTimestamp::UnixTimestamp(time_t SecSince1970)

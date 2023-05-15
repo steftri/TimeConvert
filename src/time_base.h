@@ -19,6 +19,9 @@ protected:
   int64_t   ms64_Sec;
   uint32_t  mu32_SubSec;
   bool      mb_Valid;
+
+private: 
+  int16_t _calcLeapSec(void); 
   
 public:
   TimeBase(TimeBase *p_Time);
@@ -27,6 +30,7 @@ public:
   void set(TimeBase *p_Time);
   void set(const int64_t s64_Sec, const uint32_t u32_SubSec = 0);
   int64_t get(int64_t *ps64_Sec = nullptr, uint32_t *pu32_SubSec = nullptr);
+  int64_t get(ETimeStandard e_TimeStandard, int64_t *ps64_Sec = nullptr, uint32_t *pu32_SubSec = nullptr);
 
   bool isValid(void);
   void setInvalid(void);    

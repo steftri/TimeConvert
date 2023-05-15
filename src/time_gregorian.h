@@ -10,7 +10,6 @@
 class TimeGregorian : public TimeBase
 {
 private:
-//  static int8_t ms8_UtcLeapSec;
   int16_t ms16_TimeZoneInMin;
   
 public:
@@ -33,6 +32,8 @@ public:
   
   void get(uint16_t *pu16_Year, uint8_t *pu8_Month, uint8_t *pu8_Day,
            uint8_t *pu8_Hour = nullptr, uint8_t *pu8_Min = nullptr, uint8_t *pu8_Sec = nullptr);
+  void get(ETimeStandard e_TimeStandard, uint16_t *pu16_Year, uint8_t *pu8_Month, uint8_t *pu8_Day,
+           uint8_t *pu8_Hour = nullptr, uint8_t *pu8_Min = nullptr, uint8_t *pu8_Sec = nullptr);           
 };
 
 
