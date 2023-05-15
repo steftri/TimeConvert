@@ -12,19 +12,21 @@ public:
     TAI,  // Temps Atomique International, messured by atomic clocks; TAI = TT + ~32.184s  
     GPS,  // GPS-Time, UCT = TAI - 19s
     UTC   // Universal Time Coordinated, UTC = TAI - leap seconds     
-  } ETimeBase;
+  } ETimeStandard;
 
 protected:
-  ETimeBase me_TimeBase;
-  uint64_t  mu64_Sec;
+  ETimeStandard me_TimeStandard;
+  int64_t   ms64_Sec;
   uint32_t  mu32_SubSec;
   bool      mb_Valid;
   
 public:
-  TimeBase(ETimeBase e_TimeBase = TAI);
+  TimeBase(TimeBase *p_Time);
+  TimeBase(ETimeStandard e_TimeStandard = TAI, const int64_t s64_Sec = 0, const uint32_t u32_SubSec = 0);
   
-  void set(const uint64_t u64_Sec, const uint32_t u32_SubSec = 0);
-  uint64_t get(uint64_t *pu64_Sec = nullptr, uint32_t *pu32_SubSec = nullptr);
+  void set(TimeBase *p_Time);
+  void set(const int64_t s64_Sec, const uint32_t u32_SubSec = 0);
+  int64_t get(int64_t *ps64_Sec = nullptr, uint32_t *pu32_SubSec = nullptr);
 
   bool isValid(void);
   void setInvalid(void);    

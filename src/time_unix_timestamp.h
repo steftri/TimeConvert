@@ -14,6 +14,7 @@ public:
   UnixTimestamp(const time_t SecSince1970 = 0);
 
   void set(const time_t SecSince1970);
+
   time_t get(time_t *SecSince1970 = nullptr);
 
   bool isValid(void);

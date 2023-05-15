@@ -3,7 +3,7 @@
 
 
 #define TIME_T_MIN 0
-#define TIME_T_MAX 0xffffffffULL
+#define TIME_T_MAX 0xffffffffLL
 
 
 UnixTimestamp::UnixTimestamp(time_t SecSince1970)
@@ -16,7 +16,7 @@ UnixTimestamp::UnixTimestamp(time_t SecSince1970)
 
 void UnixTimestamp::set(const time_t SecSince1970)
 {
-  TimeBase::set(static_cast<uint64_t>(SecSince1970));
+  TimeBase::set(static_cast<int64_t>(SecSince1970));
 
   return;
 }

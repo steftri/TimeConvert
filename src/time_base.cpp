@@ -2,32 +2,55 @@
 
 
 
-TimeBase::TimeBase(ETimeBase e_TimeBase)
-  : me_TimeBase{e_TimeBase}
-  , mu64_Sec{0}
-  , mu32_SubSec{0}
+TimeBase::TimeBase(TimeBase *p_Time)
+{
+  if(p_Time)
+  {
+    me_TimeStandard = p_Time->me_TimeStandard;
+    ms64_Sec = p_Time->ms64_Sec;
+    mu32_SubSec = p_Time->mu32_SubSec;
+    mb_Valid = p_Time->mb_Valid;    
+  } 
+}
+
+
+TimeBase::TimeBase(ETimeStandard e_TimeStandard, const int64_t s64_Sec, const uint32_t u32_SubSec)
+  : me_TimeStandard{e_TimeStandard}
+  , ms64_Sec{s64_Sec}
+  , mu32_SubSec{u32_SubSec}
   , mb_Valid{true}
 {
 }
 
 
-void TimeBase::set(const uint64_t u64_Sec, const uint32_t u32_SubSec)
+
+void TimeBase::set(TimeBase *p_Time)
 {
-  mu64_Sec = u64_Sec;
+  me_TimeStandard = p_Time->me_TimeStandard;
+  ms64_Sec = p_Time->ms64_Sec;
+  mu32_SubSec = p_Time->mu32_SubSec;
+  mb_Valid = p_Time->mb_Valid;
+}
+
+
+
+void TimeBase::set(const int64_t s64_Sec, const uint32_t u32_SubSec)
+{
+  ms64_Sec = s64_Sec;
   mu32_SubSec = u32_SubSec;
   mb_Valid = true;
 }
 
 
 
-uint64_t TimeBase::get(uint64_t *pu64_Sec, uint32_t *pu32_SubSec)
+int64_t TimeBase::get(int64_t *ps64_Sec, uint32_t *pu32_SubSec)
 {
-  if(pu64_Sec)
-    *pu64_Sec = mu64_Sec;
+  if(ps64_Sec)
+    *ps64_Sec = ms64_Sec;
   if(pu32_SubSec)
     *pu32_SubSec = mu32_SubSec;
 
-  return mu64_Sec;
+  return ms64_Sec;
 }
 
 
@@ -48,7 +71,7 @@ void TimeBase::setInvalid(void)
 
 bool TimeBase::operator==(const TimeBase &T2)
 {
-  if(  (this->mu64_Sec==T2.mu64_Sec)
+  if(  (this->ms64_Sec==T2.ms64_Sec)
      &&(this->mu32_SubSec==T2.mu32_SubSec))
     return true;
   return false;
@@ -58,9 +81,9 @@ bool TimeBase::operator==(const TimeBase &T2)
 
 bool TimeBase::operator<=(const TimeBase &T2)
 {
-  if(this->mu64_Sec<T2.mu64_Sec)
+  if(this->ms64_Sec<T2.ms64_Sec)
     return true;
-  if(this->mu64_Sec==T2.mu64_Sec && this->mu32_SubSec<=T2.mu32_SubSec)
+  if(this->ms64_Sec==T2.ms64_Sec && this->mu32_SubSec<=T2.mu32_SubSec)
     return true;
   return false;
 }
@@ -69,9 +92,9 @@ bool TimeBase::operator<=(const TimeBase &T2)
 
 bool TimeBase::operator<(const TimeBase &T2)
 {
-  if(this->mu64_Sec<T2.mu64_Sec)
+  if(this->ms64_Sec<T2.ms64_Sec)
     return true;
-  if(this->mu64_Sec==T2.mu64_Sec && this->mu32_SubSec<T2.mu32_SubSec)
+  if(this->ms64_Sec==T2.ms64_Sec && this->mu32_SubSec<T2.mu32_SubSec)
     return true;
   return false;
 }
@@ -80,9 +103,9 @@ bool TimeBase::operator<(const TimeBase &T2)
 
 bool TimeBase::operator>=(const TimeBase &T2)
 {
-  if(this->mu64_Sec>T2.mu64_Sec)
+  if(this->ms64_Sec>T2.ms64_Sec)
     return true;
-  if(this->mu64_Sec==T2.mu64_Sec && this->mu32_SubSec>=T2.mu32_SubSec)
+  if(this->ms64_Sec==T2.ms64_Sec && this->mu32_SubSec>=T2.mu32_SubSec)
     return true;
   return false;
 }
@@ -91,9 +114,9 @@ bool TimeBase::operator>=(const TimeBase &T2)
 
 bool TimeBase::operator>(const TimeBase &T2)
 {
-  if(this->mu64_Sec>T2.mu64_Sec)
+  if(this->ms64_Sec>T2.ms64_Sec)
     return true;
-  if(this->mu64_Sec==T2.mu64_Sec && this->mu32_SubSec>T2.mu32_SubSec)
+  if(this->ms64_Sec==T2.ms64_Sec && this->mu32_SubSec>T2.mu32_SubSec)
     return true;
   return false;
 }
