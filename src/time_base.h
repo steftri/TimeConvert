@@ -16,7 +16,7 @@ class TimeLeapSec   // singleton
   uint8_t mu8_NumberOfEntries;
 
 public: 
-  static TimeLeapSec *get(void);
+  static TimeLeapSec *getObject(void);
 
   void clear(void);
   int32_t addEntry(const uint32_t u32_Time, const int8_t s8_Diff);

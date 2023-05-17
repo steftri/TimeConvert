@@ -42,7 +42,7 @@ TimeLeapSec::TimeLeapSec(void)
 }
 
 
-TimeLeapSec *TimeLeapSec::get(void) 
+TimeLeapSec *TimeLeapSec::getObject(void) 
 {
   static TimeLeapSec myTimeLeapSecSingleton; 
   return &myTimeLeapSecSingleton; 
@@ -130,14 +130,14 @@ TimeBase::TimeBase(ETimeStandard e_TimeStandard, const int64_t s64_Sec, const ui
 
 void TimeBase::clearAllLeapSecs(void)
 {
-  TimeLeapSec::get()->clear();
+  TimeLeapSec::getObject()->clear();
 }
 
 
 
 int32_t TimeBase::addLeapSec(const uint32_t u32_UtcSecSince1970, const int8_t s8_Diff)
 {
-  return TimeLeapSec::get()->addEntry(u32_UtcSecSince1970, s8_Diff);
+  return TimeLeapSec::getObject()->addEntry(u32_UtcSecSince1970, s8_Diff);
 }
 
 
@@ -193,7 +193,7 @@ int64_t TimeBase::get(ETimeStandard e_TimeStandard, int64_t *ps64_Sec, uint32_t 
       case TT: s16_SecDiff+=32; s32_SubSecDiff+=(0x100000000LL*184/1000); break; // +32.184s
       case TAI: break;
       case GPS: s16_SecDiff+=19; break; // +19s
-      case UTC: s16_SecDiff+=TimeLeapSec::get()->calcLeapSecondsUTC(ms64_Sec); break;
+      case UTC: s16_SecDiff+=TimeLeapSec::getObject()->calcLeapSecondsUTC(ms64_Sec); break;
       default: break;
     }
     switch(e_TimeStandard)
@@ -201,7 +201,7 @@ int64_t TimeBase::get(ETimeStandard e_TimeStandard, int64_t *ps64_Sec, uint32_t 
       case TT: s16_SecDiff-=32; s32_SubSecDiff-=(0x100000000LL*184/1000); break; // -32.184s
       case TAI: break;
       case GPS: s16_SecDiff-=19; break; // -19s
-      case UTC: s16_SecDiff-=TimeLeapSec::get()->calcLeapSecondsTAI(ms64_Sec); break;
+      case UTC: s16_SecDiff-=TimeLeapSec::getObject()->calcLeapSecondsTAI(ms64_Sec); break;
       default: break;
     }
 
