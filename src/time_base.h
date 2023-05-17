@@ -63,11 +63,11 @@ public:
   bool isValid(void);
   void setInvalid(void);    
   
-  bool operator==(const TimeBase &T2);
-  bool operator<=(const TimeBase &T2);
-  bool operator<(const TimeBase &T2);
-  bool operator>=(const TimeBase &T2);
-  bool operator>(const TimeBase &T2);
+  bool operator==(TimeBase &T2);
+  bool operator<=(TimeBase &T2);
+  bool operator<(TimeBase &T2);
+  bool operator>=(TimeBase &T2);
+  bool operator>(TimeBase &T2);
 };
 
 

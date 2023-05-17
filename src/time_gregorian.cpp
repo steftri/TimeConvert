@@ -29,8 +29,6 @@ TimeGregorian::TimeGregorian(const uint16_t u16_Year, const uint8_t u8_Month, co
 
 
 
-
-
 void TimeGregorian::time2Gregorian(uint16_t *pu16_Year, uint8_t *pu8_Month, uint8_t *pu8_Day,
       uint8_t *pu8_Hour, uint8_t *pu8_Min, uint8_t *pu8_Sec, const int64_t s64_TimeInSec, const int16_t s16_TimeZoneMin)
 {
@@ -114,7 +112,6 @@ int64_t TimeGregorian::gregorian2Time(int64_t *ps64_TimeInSec,
   uint16_t u16_LeapYears;
   int32_t s32_DaysSince1970;
 
-  
   /* for algorithm, see https://de.wikipedia.org/wiki/Unixzeit */
   
   u16_LeapYears = ((u16_Year-1)-1968)/4    /* Anzahl der Schaltjahre seit 1970 (ohne das evtl. laufende Schaltjahr) */
@@ -198,23 +195,3 @@ void TimeGregorian::get(ETimeStandard e_TimeStandard, char *pc_Buffer, const uin
 {
   time2Iso8601(pc_Buffer, u8_BufferSize, TimeBase::get(e_TimeStandard), ms16_TimeZoneInMin);
 } 
-
-
-/*
-int16_t TimeUtc::ms16_UtcLeapSec = 32;
-
-
-void TimeUtc::setUtcLeapSec(const int16_t s16_LeapSec)
-{
-  ms16_UtcLeapSec=s16_LeapSec;
-}
-
-
-
-int16_t TimeUtc::getUtcLeapSec(void)
-{
-  return ms16_UtcLeapSec;
-}*/
-
-
-
