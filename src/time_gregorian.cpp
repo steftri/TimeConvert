@@ -187,6 +187,19 @@ void TimeGregorian::get(ETimeStandard e_TimeStandard, uint16_t *pu16_Year, uint8
 }
 
 
+
+void TimeGregorian::get(char *pc_Buffer, const uint8_t u8_BufferSize)
+{
+  time2Iso8601(pc_Buffer, u8_BufferSize, TimeBase::get(), ms16_TimeZoneInMin);
+}
+
+
+void TimeGregorian::get(ETimeStandard e_TimeStandard, char *pc_Buffer, const uint8_t u8_BufferSize)
+{
+  time2Iso8601(pc_Buffer, u8_BufferSize, TimeBase::get(e_TimeStandard), ms16_TimeZoneInMin);
+} 
+
+
 /*
 int16_t TimeUtc::ms16_UtcLeapSec = 32;
 

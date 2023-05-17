@@ -22,7 +22,7 @@ public:
 
   static int64_t gregorian2Time(int64_t *ps64_TimeInSec,
                      const uint16_t u16_Year, const uint8_t u8_Month, const uint8_t u8_Day,
-                     const uint8_t u8_Hour, const uint8_t u8_Min, const uint8_t u8_Sec,
+                     const uint8_t u8_Hour = 0, const uint8_t u8_Min = 0, const uint8_t u8_Sec = 0,
                      const int16_t s16_TimeZoneMin = 0);
  
   static int32_t time2Iso8601(char *pc_Buffer, const uint8_t u8_BufferSize, const uint64_t u64_TimeInSec, const int16_t s16_TimeZoneMin = 0);
@@ -33,7 +33,9 @@ public:
   void get(uint16_t *pu16_Year, uint8_t *pu8_Month, uint8_t *pu8_Day,
            uint8_t *pu8_Hour = nullptr, uint8_t *pu8_Min = nullptr, uint8_t *pu8_Sec = nullptr);
   void get(ETimeStandard e_TimeStandard, uint16_t *pu16_Year, uint8_t *pu8_Month, uint8_t *pu8_Day,
-           uint8_t *pu8_Hour = nullptr, uint8_t *pu8_Min = nullptr, uint8_t *pu8_Sec = nullptr);           
+           uint8_t *pu8_Hour = nullptr, uint8_t *pu8_Min = nullptr, uint8_t *pu8_Sec = nullptr);    
+  void get(char *pc_Buffer, const uint8_t u8_BufferSize);
+  void get(ETimeStandard e_TimeStandard, char *pc_Buffer, const uint8_t u8_BufferSize);     
 };
 
 
