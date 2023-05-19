@@ -2,16 +2,16 @@
 
 
 
-
-TimeCuc::TimeCuc(int64_t s64_Epoch) 
-  : TimeBase(TAI, CTimeCucEpoch+s64_Epoch) 
-  , ms64_Epoch{s64_Epoch} 
+TimeCuc::TimeCuc(const int64_t s64_Epoch)
+ : TimeBase(TAI, CTimeCucEpoch+s64_Epoch)
+ , ms64_Epoch{s64_Epoch}
 {
 }
 
-TimeCuc::TimeCuc(TimeBase *p_Time, int64_t s64_Epoch)
-  : TimeBase(p_Time) 
-  , ms64_Epoch{s64_Epoch}
+
+
+TimeCuc::TimeCuc(const TimeBase *p_Time, const int64_t s64_Epoch)
+ : TimeBase(p_Time)
 {
 }
 
@@ -103,13 +103,13 @@ uint8_t TimeCuc::get(uint8_t *pu8_TimeCucBuffer, const uint8_t u8_BufferSize, co
 }
 
 
-void TimeCuc::setEpoch(int64_t s64_Epoch)
+void TimeCuc::setEpoch(const int64_t s64_Epoch)
 {
   ms64_Epoch=s64_Epoch;
 }
 
 
-uint8_t TimeCuc::calcFormat(ELevel e_Level, uint8_t u8_CoarseBytes, uint8_t u8_FineBytes)
+uint8_t TimeCuc::calcFormat(const ELevel e_Level, const uint8_t u8_CoarseBytes, const uint8_t u8_FineBytes)
 {
   return (static_cast<uint8_t>(e_Level)<<4)|(((u8_CoarseBytes-1)&0x3)<<2)|(u8_FineBytes&0x3);
 }

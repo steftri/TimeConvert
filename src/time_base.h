@@ -49,13 +49,13 @@ protected:
   bool      mb_Valid;
   
 public:
-  TimeBase(TimeBase *p_Time);
-  TimeBase(ETimeStandard e_TimeStandard = TAI, const int64_t s64_Sec = 0, const uint32_t u32_SubSec = 0);
+  TimeBase(const TimeBase *p_Time);
+  TimeBase(const ETimeStandard e_TimeStandard = TAI, const int64_t s64_Sec = 0, const uint32_t u32_SubSec = 0);
 
   void clearAllLeapSecs(void);
   int32_t addLeapSec(const uint32_t u32_UtcSecSince1970, const int8_t s8_Diff);
   
-  void set(TimeBase *p_Time);
+  void set(const TimeBase *p_Time);
   void set(const int64_t s64_Sec, const uint32_t u32_SubSec = 0);
   int64_t get(int64_t *ps64_Sec = nullptr, uint32_t *pu32_SubSec = nullptr);
   int64_t get(ETimeStandard e_TimeStandard, int64_t *ps64_Sec = nullptr, uint32_t *pu32_SubSec = nullptr);

@@ -106,19 +106,13 @@ int32_t TimeLeapSec::calcLeapSecondsUTC(int64_t s64_Sec)
 
 
 
-TimeBase::TimeBase(TimeBase *p_Time)
+TimeBase::TimeBase(const TimeBase *p_Time)
 {
-  if(p_Time)
-  {
-    me_TimeStandard = p_Time->me_TimeStandard;
-    ms64_Sec = p_Time->ms64_Sec;
-    mu32_SubSec = p_Time->mu32_SubSec;
-    mb_Valid = p_Time->mb_Valid;    
-  } 
+  set(p_Time);
 }
 
 
-TimeBase::TimeBase(ETimeStandard e_TimeStandard, const int64_t s64_Sec, const uint32_t u32_SubSec)
+TimeBase::TimeBase(const ETimeStandard e_TimeStandard, const int64_t s64_Sec, const uint32_t u32_SubSec)
   : me_TimeStandard{e_TimeStandard}
   , ms64_Sec{s64_Sec}
   , mu32_SubSec{u32_SubSec}
@@ -142,12 +136,15 @@ int32_t TimeBase::addLeapSec(const uint32_t u32_UtcSecSince1970, const int8_t s8
 
 
 
-void TimeBase::set(TimeBase *p_Time)
+void TimeBase::set(const TimeBase *p_Time)
 {
-  me_TimeStandard = p_Time->me_TimeStandard;
-  ms64_Sec = p_Time->ms64_Sec;
-  mu32_SubSec = p_Time->mu32_SubSec;
-  mb_Valid = p_Time->mb_Valid;
+  if(p_Time)
+  {
+    me_TimeStandard = p_Time->me_TimeStandard;
+    ms64_Sec = p_Time->ms64_Sec;
+    mu32_SubSec = p_Time->mu32_SubSec;
+    mb_Valid = p_Time->mb_Valid;    
+  } 
 }
 
 

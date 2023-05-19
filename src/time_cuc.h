@@ -29,6 +29,8 @@
 const uint8_t CTimeCucMaxSize = 8;
 const int64_t CTimeCucEpoch = -(((1970LL-1958LL)*365LL+3LL)*24LL*60LL*60LL);
 
+
+
 class TimeCuc : public TimeBase
 {
   int64_t ms64_Epoch; // diff against 1958-01-01T00:00 (in sec) 
@@ -36,14 +38,14 @@ class TimeCuc : public TimeBase
 public:
   typedef enum {L1 = 0x01, L2 = 0x02} ELevel;
 
-  TimeCuc(int64_t s64_Epoch = 0);  // diff to 1958-01-01T00:00:00 in seconds
-  TimeCuc(TimeBase *p_Time, int64_t s64_Epoch = 0);
+  TimeCuc(const int64_t s64_Epoch = 0);
+  TimeCuc(const TimeBase *p_Time, const int64_t s64_Epoch = 0);
 
   void set(const uint8_t *pu8_TimeCucBuffer, const uint8_t u8_BufferSize);
   uint8_t get(uint8_t *pu8_TimeCucBuffer, const uint8_t u8_BufferSize, const uint8_t u8_Format = 0x1E);
 
-  void setEpoch(int64_t s64_Epoch);
-  static uint8_t calcFormat(ELevel e_Level, uint8_t u8_CoarseBytes, uint8_t u8_FineBytes);
+  void setEpoch(const int64_t s64_Epoch);
+  static uint8_t calcFormat(const ELevel e_Level, const uint8_t u8_CoarseBytes, const uint8_t u8_FineBytes);
 };
 
 

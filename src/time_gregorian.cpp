@@ -5,12 +5,20 @@
 
 
 
-
 TimeGregorian::TimeGregorian(const int16_t s16_TimeZoneInMin) 
  : TimeBase(UTC)
  , ms16_TimeZoneInMin{s16_TimeZoneInMin}
 {
 }
+
+
+
+TimeGregorian::TimeGregorian(const TimeBase *p_Time, const int16_t s16_TimeZoneInMin)
+ : TimeBase(p_Time)
+ , ms16_TimeZoneInMin{s16_TimeZoneInMin} 
+{
+}
+
 
 
 TimeGregorian::TimeGregorian(const ETimeStandard e_TimeStandard, const int16_t s16_TimeZoneInMin) 
@@ -20,12 +28,22 @@ TimeGregorian::TimeGregorian(const ETimeStandard e_TimeStandard, const int16_t s
 }
 
 
+
 TimeGregorian::TimeGregorian(const uint16_t u16_Year, const uint8_t u8_Month, const uint8_t u8_Day, const uint8_t u8_Hour, const uint8_t u8_Min, const uint8_t u8_Sec, const int16_t s16_TimeZoneInMin)
   : TimeBase(UTC)
   , ms16_TimeZoneInMin{s16_TimeZoneInMin}
 {
   set(u16_Year, u8_Month, u8_Day, u8_Hour, u8_Min, u8_Sec);
 }    
+
+
+
+TimeGregorian::TimeGregorian(const char *pc_Iso8601String)
+  : TimeBase(UTC)
+  , ms16_TimeZoneInMin{0}
+{
+  set(pc_Iso8601String);
+}
 
 
 
