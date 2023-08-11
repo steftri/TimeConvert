@@ -1,49 +1,51 @@
 #ifndef _TIME_CUC_H_
 #define _TIME_CUC_H_
 
+#include <inttypes.h>
+
 #include "time_base.h"
+
 
 /****************************************************************/
 /* PUS TC Packet according to                                   */
 /*                                                              */
 /*  ECSS-E-70-41A - Space Packet Protocol                       */
+/*  CCSDS 301.0-B-2 - Time code formats                         */
 /*                                                              */
 /*  Time base is TAI.                                           */
+/*  Recommended epoch: 1958-01-01T00:00 TAI                     */
+/*                                                              */
+/*  CUC format: description in P-Field (first byte)             */
+/*  bit 0: Extension flag                                       */
+/*  bit 1-3: 001: Level 1; epoch is 1958-01-01                  */
+/*          010: Level 2; epoch is user defined                 */
+/*  bit 4-5: number of octets of coarse time -1                 */
+/*  bit 6-7 number of octets of fine time                       */
 /*                                                              */
 /****************************************************************/
 
 
 
+const uint8_t CTimeCucMaxSize = 8;
+const int64_t CTimeCucEpoch = -(((1970LL-1958LL)*365LL+3LL)*24LL*60LL*60LL);
 
-const uint8_t CTimeCucSize = 8;
 
-typedef enum
+
+class TimeCuc : public TimeBase
 {
-  TimeCUC10 = 0x20,
-  TimeCUC11 = 0x21,
-  TimeCUC12 = 0x22,
-  TimeCUC13 = 0x23,
-  TimeCUC20 = 0x24,
-  TimeCUC21 = 0x25,
-  TimeCUC22 = 0x26,
-  TimeCUC23 = 0x27,
-  TimeCUC30 = 0x28,
-  TimeCUC31 = 0x29,
-  TimeCUC32 = 0x2A,
-  TimeCUC33 = 0x2B,
-  TimeCUC40 = 0x2C,
-  TimeCUC41 = 0x2D,
-  TimeCUC42 = 0x2E,
-  TimeCUC43 = 0x2F
-} ETimeCucFormat;
+  int64_t ms64_Epoch; // diff against 1958-01-01T00:00 (in sec) 
 
-
-
-class TimeCuc : public Time
-{
 public:
+  typedef enum {L1 = 0x01, L2 = 0x02} ELevel;
+
+  TimeCuc(const int64_t s64_Epoch = 0);
+  TimeCuc(const TimeBase *p_Time, const int64_t s64_Epoch = 0);
+
   void set(const uint8_t *pu8_TimeCucBuffer, const uint8_t u8_BufferSize);
-  void get(uint8_t *pu8_TimeCucBuffer, const uint8_t u8_BufferSize, const ETimeCucFormat e_TimeCucFormat = TimeCUC42);
+  uint8_t get(uint8_t *pu8_TimeCucBuffer, const uint8_t u8_BufferSize, const uint8_t u8_Format = 0x1E);
+
+  void setEpoch(const int64_t s64_Epoch);
+  static uint8_t calcFormat(const ELevel e_Level, const uint8_t u8_CoarseBytes, const uint8_t u8_FineBytes);
 };
 
 
