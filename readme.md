@@ -76,7 +76,7 @@ TODO
 
 ## Known Anomalies
 
-* none
+* Unit tests are not running on Arduino Uno
 
 
 ## Changelog
