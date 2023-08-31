@@ -5,6 +5,9 @@ project(TimeConvert LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# ask for all warnings and strict compliance with the standard
+set(CMAKE_CXX_FLAGS "-Wall -Werror -pedantic")
+
 add_library(TimeConvert STATIC
   src/timeconvert.h
   src/time_base.cpp
