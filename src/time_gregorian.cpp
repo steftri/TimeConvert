@@ -4,6 +4,9 @@
 #include "time_gregorian.h"
 
 
+#define MAX_ISO8601_STR_LENGTH 30   // 9999999-12-31T12:00:22.000000
+
+
 
 TimeGregorian::TimeGregorian(const int16_t s16_TimeZoneInMin) 
  : TimeBase(UTC)
@@ -126,12 +129,12 @@ int32_t TimeGregorian::gregorian2Time(int64_t *ps64_TimeInSec,
                                 const int16_t s16_TimeZoneMin)
 {
   int64_t s64_TimeInSec;
-  uint16_t u16_DayOfYear[12] = /* Anzahl der Tage seit Jahresanfang ohne Tage des aktuellen Monats und ohne Schalttag */
+  const uint16_t u16_DayOfYear[12] = /* Anzahl der Tage seit Jahresanfang ohne Tage des aktuellen Monats und ohne Schalttag */
     {0,31,59,90,120,151,181,212,243,273,304,334};
   uint16_t u16_LeapYears;
   int32_t s32_DaysSince1970;
 
-  if(s32_Year<0 || s32_Year>9999 || u8_Month>12 || u8_Day>31 || u8_Hour>24 || u8_Min>60 || u8_Sec>70)
+  if(s32_Year<0 || s32_Year>9999 || u8_Month==0 || u8_Month>12 || u8_Day==0 || u8_Day>31 || u8_Hour>24 || u8_Min>60 || u8_Sec>70)
     return -1;
 
   /* for algorithm, see https://de.wikipedia.org/wiki/Unixzeit */
@@ -198,6 +201,7 @@ int32_t TimeGregorian::set(const uint16_t u16_Year, const uint8_t u8_Month, cons
 }
 
 
+
 int32_t TimeGregorian::set(const char *pc_Iso8601String)
 {
   int32_t s32_Year = 0;
@@ -205,7 +209,7 @@ int32_t TimeGregorian::set(const char *pc_Iso8601String)
   uint8_t u8_Month = 0, u8_Day = 0, u8_Hour = 0, u8_Min = 0, u8_Sec = 0;
   uint8_t u8_StringPtr = 0; 
 
-  while(u8_StringPtr<UINT8_MAX && pc_Iso8601String[u8_StringPtr] && isspace(pc_Iso8601String[u8_StringPtr]))
+  while(u8_StringPtr<MAX_ISO8601_STR_LENGTH && pc_Iso8601String[u8_StringPtr] && isspace(pc_Iso8601String[u8_StringPtr]))
     u8_StringPtr++;
   if(pc_Iso8601String[u8_StringPtr] == '-')
   {
@@ -213,32 +217,32 @@ int32_t TimeGregorian::set(const char *pc_Iso8601String)
     u8_StringPtr++;
   }
   // YYYY-MM-DD
-  while(u8_StringPtr<UINT8_MAX && pc_Iso8601String[u8_StringPtr] && isdigit(pc_Iso8601String[u8_StringPtr]))
+  while(u8_StringPtr<MAX_ISO8601_STR_LENGTH && pc_Iso8601String[u8_StringPtr] && isdigit(pc_Iso8601String[u8_StringPtr]))
     s32_Year = s32_Year*10+(pc_Iso8601String[u8_StringPtr++]-'0');
   if(b_Negative)
     s32_Year = -s32_Year;
   if(pc_Iso8601String[u8_StringPtr++]!='-')
     return -1;
-  while(u8_StringPtr<UINT8_MAX && pc_Iso8601String[u8_StringPtr] && isdigit(pc_Iso8601String[u8_StringPtr]))
+  while(u8_StringPtr<MAX_ISO8601_STR_LENGTH && pc_Iso8601String[u8_StringPtr] && isdigit(pc_Iso8601String[u8_StringPtr]))
     u8_Month = u8_Month*10+(pc_Iso8601String[u8_StringPtr++]-'0');
   if(pc_Iso8601String[u8_StringPtr++]!='-')
     return -1;
-  while(u8_StringPtr<UINT8_MAX && pc_Iso8601String[u8_StringPtr] && isdigit(pc_Iso8601String[u8_StringPtr]))
+  while(u8_StringPtr<MAX_ISO8601_STR_LENGTH && pc_Iso8601String[u8_StringPtr] && isdigit(pc_Iso8601String[u8_StringPtr]))
     u8_Day = u8_Day*10+(pc_Iso8601String[u8_StringPtr++]-'0');    
 
   if(pc_Iso8601String[u8_StringPtr]=='T' || isspace(pc_Iso8601String[u8_StringPtr]))
   {
     // HH:MM[:SS]
     u8_StringPtr++;
-    while(u8_StringPtr<UINT8_MAX && pc_Iso8601String[u8_StringPtr] && isdigit(pc_Iso8601String[u8_StringPtr]))
+    while(u8_StringPtr<MAX_ISO8601_STR_LENGTH && pc_Iso8601String[u8_StringPtr] && isdigit(pc_Iso8601String[u8_StringPtr]))
       u8_Hour = u8_Hour*10+(pc_Iso8601String[u8_StringPtr++]-'0'); 
     if(pc_Iso8601String[u8_StringPtr++]!=':')
       return -1;
-    while(u8_StringPtr<UINT8_MAX && pc_Iso8601String[u8_StringPtr] && isdigit(pc_Iso8601String[u8_StringPtr]))
+    while(u8_StringPtr<MAX_ISO8601_STR_LENGTH && pc_Iso8601String[u8_StringPtr] && isdigit(pc_Iso8601String[u8_StringPtr]))
       u8_Min = u8_Min*10+(pc_Iso8601String[u8_StringPtr++]-'0');    
     if(pc_Iso8601String[u8_StringPtr++]==':')
     {
-      while(u8_StringPtr<UINT8_MAX && pc_Iso8601String[u8_StringPtr] && isdigit(pc_Iso8601String[u8_StringPtr]))
+      while(u8_StringPtr<MAX_ISO8601_STR_LENGTH && pc_Iso8601String[u8_StringPtr] && isdigit(pc_Iso8601String[u8_StringPtr]))
         u8_Sec = u8_Sec*10+(pc_Iso8601String[u8_StringPtr++]-'0'); 
     }
   }

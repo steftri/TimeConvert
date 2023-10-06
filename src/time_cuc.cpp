@@ -12,6 +12,7 @@ TimeCuc::TimeCuc(const int64_t s64_Epoch)
 
 TimeCuc::TimeCuc(const TimeBase *p_Time, const int64_t s64_Epoch)
  : TimeBase(p_Time)
+ , ms64_Epoch{s64_Epoch}
 {
 }
 

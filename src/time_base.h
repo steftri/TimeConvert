@@ -60,8 +60,8 @@ public:
   int64_t get(int64_t *ps64_Sec = nullptr, uint32_t *pu32_SubSec = nullptr);
   int64_t get(ETimeStandard e_TimeStandard, int64_t *ps64_Sec = nullptr, uint32_t *pu32_SubSec = nullptr);
 
-  bool isValid(void);
-  void setInvalid(void);    
+  virtual bool isValid(void);
+  void setInvalid(void);
   
   bool operator==(TimeBase &T2);
   bool operator<=(TimeBase &T2);
