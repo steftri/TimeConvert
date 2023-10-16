@@ -11,7 +11,7 @@
 class UnixTimestamp : public TimeBase
 {
 public:
-  UnixTimestamp(const time_t SecSince1970 = 0);
+  explicit UnixTimestamp(const time_t SecSince1970 = 0);
 
   void set(const time_t SecSince1970);
 

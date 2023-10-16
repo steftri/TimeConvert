@@ -38,8 +38,8 @@ class TimeCuc : public TimeBase
 public:
   typedef enum {L1 = 0x01, L2 = 0x02} ELevel;
 
-  TimeCuc(const int64_t s64_Epoch = 0);
-  TimeCuc(const TimeBase *p_Time, const int64_t s64_Epoch = 0);
+  explicit TimeCuc(const int64_t s64_Epoch = 0);
+  explicit TimeCuc(const TimeBase *p_Time, const int64_t s64_Epoch = 0);
 
   void set(const uint8_t *pu8_TimeCucBuffer, const uint8_t u8_BufferSize);
   uint8_t get(uint8_t *pu8_TimeCucBuffer, const uint8_t u8_BufferSize, const uint8_t u8_Format = 0x1E);

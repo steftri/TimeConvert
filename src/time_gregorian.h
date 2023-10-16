@@ -13,12 +13,12 @@ private:
   int16_t ms16_TimeZoneInMin;
   
 public:
-  TimeGregorian(const int16_t s16_TimeZoneInMin = 0);
-  TimeGregorian(const TimeBase *p_Time, const int16_t s16_TimeZoneInMin = 0);
-  TimeGregorian(const ETimeStandard e_TimeStandard, const int16_t s16_TimeZoneInMin = 0);
+  explicit TimeGregorian(const int16_t s16_TimeZoneInMin = 0);
+  explicit TimeGregorian(const TimeBase *p_Time, const int16_t s16_TimeZoneInMin = 0);
+  explicit TimeGregorian(const ETimeStandard e_TimeStandard, const int16_t s16_TimeZoneInMin = 0);
 
-  TimeGregorian(const uint16_t u16_Year, const uint8_t u8_Month, const uint8_t u8_Day, const uint8_t u8_Hour = 0, const uint8_t u8_Min = 0, const uint8_t u8_Sec = 0, const int16_t s16_TimeZoneInMin = 0);
-  TimeGregorian(const char *pc_Iso8601String);
+  explicit TimeGregorian(const uint16_t u16_Year, const uint8_t u8_Month, const uint8_t u8_Day, const uint8_t u8_Hour = 0, const uint8_t u8_Min = 0, const uint8_t u8_Sec = 0, const int16_t s16_TimeZoneInMin = 0);
+  explicit TimeGregorian(const char *pc_Iso8601String);
 
   static void time2Gregorian(int32_t *ps32_Year, uint8_t *pu8_Month, uint8_t *pu8_Day,
                      uint8_t *pu8_Hour, uint8_t *pu8_Min, uint8_t *pu8_Sec, const int64_t s64_TimeInSec, const int16_t s16_TimeZoneMin = 0);
