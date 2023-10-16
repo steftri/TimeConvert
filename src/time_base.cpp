@@ -178,13 +178,14 @@ int64_t TimeBase::get(int64_t *ps64_Sec, uint32_t *pu32_SubSec)
     UTC   // Universal Time Coordinated, UTC = TAI - leap seconds */
 int64_t TimeBase::get(ETimeStandard e_TimeStandard, int64_t *ps64_Sec, uint32_t *pu32_SubSec)
 {
-  int16_t  s16_SecDiff = 0;
-  int32_t  s32_SubSecDiff = 0;
   int64_t  s64_Sec=ms64_Sec;
   uint32_t u32_SubSec=mu32_SubSec;
 
   if(e_TimeStandard!=me_TimeStandard)
   {
+    int16_t  s16_SecDiff = 0;
+    int32_t  s32_SubSecDiff = 0;
+
     switch(me_TimeStandard)
     {
       case TT: s16_SecDiff+=32; s32_SubSecDiff+=(0x100000000LL*184/1000); break; // +32.184s
